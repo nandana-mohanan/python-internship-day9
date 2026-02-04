@@ -1,15 +1,13 @@
 
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
-# --- Ithaanu maattangal ---
 from .models.user import User
 from .models.job import Job
 from .models.application import Application
-# -------------------------
 
 from .serializers import JobSerializer, ApplicationSerializer, RegisterSerializer
 
@@ -41,6 +39,8 @@ class JobCreateAPI(APIView):
 
 
 class ApplicationListAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         apps = Application.objects.all()
         serializer = ApplicationSerializer(apps, many=True)
